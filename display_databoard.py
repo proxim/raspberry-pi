@@ -39,13 +39,15 @@ if __name__ == '__main__':
 
         # move motors
         low_motor.forward()
-        time.sleep(5)
+        time.sleep(3)
+        low_motor.stop()
 
-        # cycle screen
-
+        # delay until next statistic
 
         # check pygame events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 pygame.quit()
+
+        
