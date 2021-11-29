@@ -65,7 +65,7 @@ class DCMotor():
     3.backward 4.stop 5 .brake 6.cleanup"""
 
     def __init__(self, pin_one, pin_two,
-                 pwm_pin, freq=50, name='DC Motor'):
+                 pwm_pin, freq=70, name='DC Motor'):
         """ init method
         (1) pin_one, type=int,  GPIO pin connected to IN1 or IN3
         (2) Pin two type=int, GPIO pin connected to IN2 or IN4
@@ -129,19 +129,83 @@ class DCMotor():
         self.my_pwm.ChangeDutyCycle(0)
         if clean_up:
             GPIO.cleanup()
+    
+    def move(self, distance, time_dist_const=1):
+        self.forward(self.freq)
+        time.sleep(distance * time_dist_const)
+        self.stop()
+        
+    def move_back(self, distance, time_dist_const=1):
+        self.backward(self.freq)
+        time.sleep(distance * time_dist_const)
+        self.stop()
+        
+
+def test_motors(*motors):
+    print('Testing motors.')
+    
+    for i in range(5):
+        for motor in motors:
+            motor.forward()
+        time.sleep(1)
+        
+        for motor in motors:
+            motor.stop()
+        time.sleep(1)
+
+    for motor in motors:
+        motor.stop()
 
 if __name__ == '__main__':
+    # motor controller 1 pins
+    MC1_PWM1 = 23
+    MC1_LN1 = 25
+    MC1_LN2 = 8
+
+    MC1_LN3 = 7
+    MC1_LN4 = 1
+    MC1_PWM2 = 24
+
+    # motor controller 2 pins
+    MC2_LN1 = 5
+    MC2_LN2 = 6
+    MC2_PWM1 = 13
     
-    setup()
-
-    stepper = StepperMotor(STEPPER_PINS)
+    GPIO.setmode(GPIO.BCM)
     
-    stepper.rotate_cw(90)
-    stepper.rotate_ccw(90)
+    # set up motors
+    low_motor = DCMotor(MC1_LN2, MC1_LN1, MC1_PWM1)
+    mid_motor = DCMotor(MC1_LN3, MC1_LN4, MC1_PWM2)
+    high_motor = DCMotor(MC2_LN2, MC2_LN1, MC2_PWM1)
+    
+    
+    
+    #test_motors(low_motor, mid_motor, high_motor)
+    # for freq=50 DIST_CONST = 2.15
+    DIST_CONST = 1
+    ORANGE_TRASH = .8
+    time.sleep(2)
+    
+    low_motor.move(1, ORANGE_TRASH)
+    mid_motor.move(1, DIST_CONST)
+    high_motor.move(1, DIST_CONST)
+    time.sleep(2)
+    
+    low_motor.move_back(1, ORANGE_TRASH)
+    #time.sleep(2)
+    
+    
+    #time.sleep(2)
+    
+    mid_motor.move_back(1, DIST_CONST)
+    #time.sleep(2)
+    
+    
+    #time.sleep(2)
+    
+    high_motor.move_back(1, DIST_CONST)
+    #time.sleep(2)
+    
+    GPIO.cleanup()
 
-    cleanup()
 
-#try:
-#    pass
-#except KeyboardInterrupt:
-#    print('keyboard interrupted')
