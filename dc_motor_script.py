@@ -1,18 +1,18 @@
 import RPi.GPIO as GPIO          
 from time import sleep
 
-in1 = 25
-in2 = 8
-en = 23
+in1 = 7
+in2 = 1
+en = 24
 temp1=1
-
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(in1,GPIO.OUT)
 GPIO.setup(in2,GPIO.OUT)
 GPIO.setup(en,GPIO.OUT)
 GPIO.output(in1,GPIO.LOW)
 GPIO.output(in2,GPIO.LOW)
-p=GPIO.PWM(en,1000)
+p=GPIO.PWM(en,100)
 
 p.start(25)
 print("\n")
@@ -22,7 +22,7 @@ print("\n")
 
 while(1):
 
-    x=raw_input()
+    x=input('command: ')
     
     if x=='r':
         print("run")

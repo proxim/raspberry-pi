@@ -33,7 +33,7 @@ if __name__ == '__main__':
     
     DIST_CONST = 1
     DIST_CONST_OR = .8
-    TIME_BTN_STATS = 5
+    TIME_BTN_STATS = 7
     
     # sample data (hardcoded for now)
     stats = [{
@@ -81,10 +81,7 @@ if __name__ == '__main__':
         mid_motor.move(mid, DIST_CONST)
         
         high_motor.move(high, DIST_CONST)
-        
-        time.sleep(2)
 
-        
         # delay until next statistic
         time.sleep(TIME_BTN_STATS)
         
